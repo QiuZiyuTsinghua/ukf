@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
-project(ukf VERSION 1.0)
+project(truck_ukf VERSION 1.0)
 
 # 指定 C++ 标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 编译选项
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall -Wextra")
 
 # 查找 Eigen 库
 find_package(Eigen3 QUIET)
@@ -31,6 +34,12 @@ list(FILTER UKF_SOURCES EXCLUDE REGEX ".*main\\.cpp$")
 
 # 创建UKF库
 add_library(ukf_lib ${UKF_SOURCES})
+
+# 设置库的包含目录
+target_include_directories(ukf_lib PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 # 创建主可执行文件
 add_executable(ukf src/main.cpp)
